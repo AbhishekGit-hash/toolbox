@@ -7,7 +7,7 @@ A collection of tools and services for data engineering, orchestration, and infr
 ## AWS Services
 
 - **Data Storage:** S3, Redshift, Glue Catalog Database
-- **ETL Services:** Glue, EMR, Lambda
+- **ETL Services:** Glue, EMR, Lambda, ECS
 - **Orchestration:** Airflow
 
 ## Open Table Formats
