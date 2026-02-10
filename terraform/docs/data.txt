@@ -1,0 +1,208 @@
+The data block in Terraform is used to fetch information about existing resources that are managed outside of your current Terraform configuration. 
+Think of it as a read-only query to your cloud provider's API.
+
+Core Purpose
+Data blocks allow you to:
+1. Reference existing infrastructure not managed by your Terraform state
+2. Get dynamic information that changes over time
+3. Query cloud provider APIs for available options
+4. Build dependencies on external resources
+
+Common Use Cases
+1. Finding Existing Resources
+hcl# Find existing VPC by name
+data "aws_vpc" "existing" {
+  filter {
+    name   = "tag:Name"
+    values = ["production-vpc"]
+  }
+}
+
+# Find existing security groups
+data "aws_security_groups" "web" {
+  filter {
+    name   = "group-name"
+    values = ["web-*"]
+  }
+}
+
+# Use in new resources
+resource "aws_instance" "app" {
+  ami                    = data.aws_ami.ubuntu.id
+  instance_type          = "t3.micro"
+  vpc_security_group_ids = data.aws_security_groups.web.ids
+  subnet_id              = data.aws_subnets.private.ids[0]
+}
+2. Getting Dynamic Information
+hcl# Get current AWS region
+data "aws_region" "current" {}
+
+# Get current AWS account ID
+data "aws_caller_identity" "current" {}
+
+# Get available availability zones
+data "aws_availability_zones" "available" {
+  state = "available"
+}
+
+# Use in configuration
+locals {
+  account_id = data.aws_caller_identity.current.account_id
+  region     = data.aws_region.current.name
+  azs        = data.aws_availability_zones.available.names
+}
+
+resource "aws_s3_bucket" "logs" {
+  bucket = "my-app-logs-${local.account_id}-${local.region}"
+}
+3. Finding Latest AMIs or Images
+hcl# Get latest Amazon Linux 2 AMI
+data "aws_ami" "amazon_linux" {
+  most_recent = true
+  owners      = ["amazon"]
+
+  filter {
+    name   = "name"
+    values = ["amzn2-ami-hvm-*-x86_64-gp2"]
+  }
+
+  filter {
+    name   = "virtualization-type"
+    values = ["hvm"]
+  }
+}
+
+# Get latest Windows Server AMI
+data "aws_ami" "windows" {
+  most_recent = true
+  owners      = ["amazon"]
+
+  filter {
+    name   = "name"
+    values = ["Windows_Server-2022-English-Full-Base-*"]
+  }
+}
+4. Reading Configuration Files
+hcl# Read JSON file
+data "local_file" "config" {
+  filename = "${path.module}/config.json"
+}
+
+locals {
+  config = jsondecode(data.local_file.config.content)
+}
+
+# Read template file
+data "template_file" "user_data" {
+  template = file("${path.module}/user_data.sh.tpl")
+  
+  vars = {
+    environment = var.environment
+    app_name    = var.app_name
+  }
+}
+
+resource "aws_instance" "web" {
+  ami           = data.aws_ami.ubuntu.id
+  instance_type = "t3.micro"
+  user_data     = data.template_file.user_data.rendered
+}
+5. Networking and Subnets
+hcl# Find VPC by tag
+data "aws_vpc" "main" {
+  tags = {
+    Name = "main-vpc"
+  }
+}
+
+# Find private subnets
+data "aws_subnets" "private" {
+  filter {
+    name   = "vpc-id"
+    values = [data.aws_vpc.main.id]
+  }
+
+  tags = {
+    Type = "private"
+  }
+}
+
+# Find public subnets
+data "aws_subnets" "public" {
+  filter {
+    name   = "vpc-id"
+    values = [data.aws_vpc.main.id]
+  }
+
+  tags = {
+    Type = "public"
+  }
+}
+
+# Use in load balancer
+resource "aws_lb" "main" {
+  name               = "main-lb"
+  internal           = false
+  load_balancer_type = "application"
+  subnets            = data.aws_subnets.public.ids
+}
+6. IAM and Policies
+hcl# Get current AWS account info
+data "aws_caller_identity" "current" {}
+
+# Create IAM policy document
+data "aws_iam_policy_document" "s3_policy" {
+  statement {
+    effect = "Allow"
+    
+    actions = [
+      "s3:GetObject",
+      "s3:PutObject"
+    ]
+    
+    resources = [
+      "arn:aws:s3:::my-bucket-${data.aws_caller_identity.current.account_id}/*"
+    ]
+  }
+}
+
+resource "aws_iam_policy" "s3_access" {
+  name   = "s3-access-policy"
+  policy = data.aws_iam_policy_document.s3_policy.json
+}
+
+Advanced Patterns
+Conditional Data Sources
+hcldata "aws_ami" "selected" {
+  count       = var.use_custom_ami ? 0 : 1
+  most_recent = true
+  owners      = ["amazon"]
+
+  filter {
+    name   = "name"
+    values = ["amzn2-ami-hvm-*"]
+  }
+}
+
+locals {
+  ami_id = var.use_custom_ami ? var.custom_ami_id : data.aws_ami.selected[0].id
+}
+Data Dependencies
+hcl# Data can depend on resources
+resource "aws_vpc" "main" {
+  cidr_block = "10.0.0.0/16"
+  
+  tags = {
+    Name = "main-vpc"
+  }
+}
+
+# This data source will query after the VPC is created
+data "aws_vpc_dhcp_options" "main" {
+  depends_on = [aws_vpc.main]
+  
+  filter {
+    name   = "vpc-id"
+    values = [aws_vpc.main.id]
+  }
+}

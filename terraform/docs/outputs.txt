@@ -1,0 +1,43 @@
+Terraform output values allow you to export structured data about your resources. 
+You can use this data to configure other parts of your infrastructure with automation tools, or as a data source for another Terraform workspace. 
+Outputs are also necessary to share data from a child module to your root module.
+
+output "public_url" {
+  description = "Public URL for our Web Server"
+  value = "https://${aws_instance.web_server.public_ip}:8080/index.html"
+}
+
+output "vpc_information" {
+  description = "VPC Information about Environment"
+  value = "Your ${aws_vpc.vpc.tags.Environment} VPC has an ID of ${aws_vpc.vpc.id}"
+}
+
+
+If you ever need to read the values of your Terraform outputs but might be nervous about running a terraform apply, 
+you can use the terraform output command to view them.
+
+Run a terraform output -jsonand view the list of outputs in JSON format from your configuration
+
+terraform output -json
+{
+  "hello-world": {
+    "sensitive": false,
+    "type": "string",
+    "value": "Hello World"
+  },
+  "public_url": {
+    "sensitive": false,
+    "type": "string",
+    "value": "https://10.0.101.10:8080/index.html"
+  },
+  "vpc_id": {
+    "sensitive": false,
+    "type": "string",
+    "value": "vpc-058d23c9d5d2f70b5"
+  },
+  "vpc_information": {
+    "sensitive": false,
+    "type": "string",
+    "value": "Your demo_environment VPC has an ID of vpc-058d23c9d5d2f70b5"
+  }
+}

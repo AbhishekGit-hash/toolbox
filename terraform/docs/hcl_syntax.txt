@@ -1,0 +1,51 @@
+https://github.com/btkrausen/hashicorp/tree/master/terraform
+
+Terraform Code Configuration block types include:
+
+Terraform Settings Block
+Terraform Provider Block
+Terraform Resource Block
+Terraform Data Block
+Terraform Input Variables Block
+Terraform Local Variables Block
+Terraform Output Values Block
+Terraform Modules Block
+
+
+Resource Block:
+Resource blocks represent one or more infrastructure objects in your Terraform configuration.
+
+# Template
+<BLOCK TYPE> "<BLOCK LABEL>" "<BLOCK LABEL>" {
+ # Block body
+<IDENTIFIER> = <EXPRESSION> # Argument
+}
+
+# AWS EC2 Example
+resource "aws_instance" "web_server" { # BLOCK
+  ami = "ami-04d29b6f966df1537" # Argument
+  instance_type = var.instance_type # Argument with value as expression (Variable value replaced 11 }
+
+Variables Block:
+
+variable “<VARIABLE_NAME>” {
+  # Block body
+  type = <VARIABLE_TYPE>
+  description = <DESCRIPTION>
+  default = <EXPRESSION>
+  sensitive = <BOOLEAN>
+  validation = <RULES>
+}
+
+ORDER OF PRECEDENCE IN Variables
+
+1. Variable Defaults (lowest precedence)
+2. Environment Variables (TF_VAR_name)
+3. terraform.tfvars file & terraform.tfvars.json file
+4. *.auto.tfvars files (in lexical order) & *.auto.tfvars.json files (in lexical order)
+5. Files specified with -var-file (in command line order)
+6. Variables specified with -var (highest precedence) (in CLI)
+
+
+
+
