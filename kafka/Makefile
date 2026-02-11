@@ -23,3 +23,15 @@ change-topic-retention:
 view-topic-configs:
 	kafka-configs --describe --all --bootstrap-server broker0:29092 --topic experiments
 	kafka-configs --describe --all --bootstrap-server broker0:29092 --topic experiments.latest
+
+run-producer-console:
+	kafka-console-producer --bootstrap-server broker0:29092 --topic people
+
+run-consumer-console:
+	kafka-console-consumer --bootstrap-server broker0:29092 --topic people --from-beginning
+
+run-producer-console-key:
+	kafka-console-producer --bootstrap-server broker0:29092 --topic people --property "parse.key=true" --property "key.separator=|"
+
+run-consumer-console-key:
+	kafka-console-consumer --bootstrap-server broker0:29092 --topic people --from-beginning --property "print.key=true"

@@ -2,17 +2,14 @@
 import logging
 import os
 
-from dotenv import load_dotenv
+
 from fastapi import FastAPI
 
-from kafka import KafkaAdminClient
-from kafka.admin import NewTopic, ConfigResource, ConfigResourceType
-from kafka.errors import TopicAlreadyExistsError
+
 
 
 logger = logging.getLogger()
 
-load_dotenv(verbose=True)
 
 app = FastAPI()
 
