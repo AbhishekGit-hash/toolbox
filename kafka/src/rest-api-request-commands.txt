@@ -1,0 +1,48 @@
+To list available subjects registered to Schema Registry
+
+http :8081/subjects
+
+
+
+To list versions of a specific subject
+
+http :8081/subjects/people.avro.python-value/versions
+
+
+
+To fetch the registered subject for a specific version
+
+http :8081/subjects/people.avro.python-value/versions/2
+
+
+
+To fetch a schema by its global unique id
+
+http :8081/schemas/ids/2
+
+
+
+To check the schema compatibility mode
+
+http :8081/config
+
+
+
+Validation against latest (not compatible)
+
+http POST :8081/compatibility/subjects/people.avro.python-value/versions/latest \
+    schema="{\"type\":\"record\",\"name\":\"Person\",\"namespace\":\"com.thecodinginterface.avrodomainevents\",\"fields\":[{\"name\":\"fullName\",\"type\":\"string\"},{\"name\":\"title\",\"type\":\"string\"}]}"
+
+
+
+
+Validation (compatible)
+
+http POST :8081/compatibility/subjects/people.avro.python-value/versions/latest \
+    schema="{\"type\":\"record\",\"name\":\"Person\",\"namespace\":\"com.thecodinginterface.avrodomainevents\",\"fields\":[{\"name\":\"fullName\",\"type\":[\"null\",\"string\"],\"default\":null},{\"name\":\"title\",\"type\":\"string\"}]}"
+
+
+Register schema
+
+http POST :8081/subjects/people.avro.python-value/versions \
+    schema="{\"type\":\"record\",\"name\":\"Person\",\"namespace\":\"com.thecodinginterface.avrodomainevents\",\"fields\":[{\"name\":\"fullName\",\"type\":[\"null\",\"string\"],\"default\":null},{\"name\":\"title\",\"type\":\"string\"}]}"
