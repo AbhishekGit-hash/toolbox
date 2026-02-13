@@ -84,7 +84,7 @@ services:
     # image: confluentinc/cp-kafka-connect-base:6.1.4
     build:
       context: .
-      dockerfile: Dockerfile.datagen
+      dockerfile: Dockerfile.connect
     container_name: kafka-connect
     hostname: kafka-connect
     depends_on:
@@ -113,3 +113,29 @@ services:
     container_name: cli-tools
     entrypoint: "sleep infinity"
     restart: always
+
+  mongodb:
+    image: mongo:5.0
+    container_name: mongodb
+    hostname: mongodb
+    ports:
+      - "27017:27017"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=developer
+      - MONGO_INITDB_ROOT_PASSWORD=Develop3r
+    restart: always
+    networks:
+      - localnet
+
+  # docker exec -it mongosh mongosh mongodb://developer:Develop3r@mongodb:27017
+  mongosh:
+    image: mongo:5.0
+    container_name: mongosh
+    entrypoint: "sleep infinity"
+    restart: always
+    networks:
+      - localnet
+
+networks:
+  localnet:
+    attachable: true

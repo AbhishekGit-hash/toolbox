@@ -1,0 +1,46 @@
+
+# List docker images
+docker image ls 
+
+# List docker containers
+docker container ls 
+
+# List all containers
+docker container ls --all
+
+# Search an image of a certain keyword (e.g. nginx)
+docker search nginx
+
+# Pulling a docker container from remote docker registry and running in local
+# -P maps random port to local port 80
+# -d (daemon) runs this container in background
+docker run --name <YOU-LOCAL-CONTAINER-NAME> -P -d <NAME-OF-ACTUAL-IMAGE>
+
+# Get information about the information of container that's running
+docker container ls
+docker inspect <CONTAINER-ID>
+
+# Stopping a docker container
+docker stop <CONTAINER-ID>
+
+# Starting a docker container
+docker start <CONTAINER-ID>
+
+# Checking localhost
+curl http://localhost:<PORT>
+
+# Delete a container
+docker stop <CONTAINER-ID>
+docker rm <CONTAINER-ID>
+
+# Delete a image
+docker image ls
+docker image rm <IMAGE-ID>
+
+# Build the docker image from the Dockerfile present at project root
+docker build -t <YOUR-CONTAINER-NAME> .
+
+# Run the container
+docker image ls
+docker run <IMAGE-ID>
+
