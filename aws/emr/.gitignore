@@ -1,0 +1,10 @@
+.idea
+itvg-venv
+me-venv
+itv-ghactivity
+data/itv-github
+data.zip
+*.zip
+.DS_Store
+archive
+airflow
