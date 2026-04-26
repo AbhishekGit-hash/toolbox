@@ -1,0 +1,23 @@
+[project]
+name = "toolbox"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.14"
+dependencies = [
+    "angchain-tavily",
+    "black",
+    "faker",
+    "fastapi",
+    "isort",
+    "kafka-python",
+    "langchain",
+    "langchain-community",
+    "langchain-ollama",
+    "langchain-openai",
+    "langchain-pinecone",
+    "langchainhub",
+    "pyspark",
+    "python-dotenv",
+    "tavily-python",
+]

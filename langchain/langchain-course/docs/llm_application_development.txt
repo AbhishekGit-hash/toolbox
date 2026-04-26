@@ -1,0 +1,7 @@
+
+1. Simple LLM calls
+2. Vectorstores (RAG)
+3. Agents
+4. Agents + Vectorstores
+
+Gnerative UI/UV : CopilotKit
