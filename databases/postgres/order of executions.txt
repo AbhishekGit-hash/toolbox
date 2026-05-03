@@ -1,0 +1,40 @@
+
+FROM, JOIN
+WHERE
+GROUP BY
+aggregate functions
+HAVING
+window functions
+SELECT
+DISTINCT
+UNION/INTERSECT/EXCEPT
+ORDER BY
+OFFSET
+LIMIT/FETCH/TOP
+
+** Ways to Optimize slow running SQL queries
+
+1. Avoid SELECT * and retrieve only necessary columns
+2. Optimize JOIN operations 
+    -> Inner joins return only the matching records from the two tables that you are joining. 
+        This is almost always preferred over an outer join. 
+3. Minimize the use of subqueries -> Use CTEs
+
+4. Use UNION ALL instead of UNION
+-> UNION : Appends all rows from Table A and Table B. Duplicates are removed
+-> UNION ALL: Appends all rows from Table A and Table B. Duplicates are not removed
+UNION ALL is faster than UNION
+
+5. Avoid redundant or unnecessary data retrieval -> LIMT 100 OFFSET 20 {Skips first 20 and returns next 100 rows}
+
+###
+
+6. Consider partitioning and sharding
+-> Partitioning : Splitting 1 big table into multiple samller tables
+-> Sharding : Splitting 1 big database into multiple samller databases
+
+7. Normalize database tables
+8. Monitor query performance
+9. Leverage cloud database-specific features
+10. Use indexes effectively
+11. Utilize stored procedures
