@@ -401,7 +401,7 @@ PostgreSQL (WAL)
 
 ---
 
-## 13. Iceberg Write and Read Paths
+## 13. Iceberg <mark>Write and Read Paths</mark>
 
 **Q: Walk me through the full write path and read path in an Iceberg table.**
 
@@ -427,7 +427,7 @@ This layered pruning means a query touching 1% of data may only open 1% of files
 
 ---
 
-## 14. Performance Tuning
+## 14. <mark>Performance Tuning</mark>
 
 **Q: What are the main levers for tuning Iceberg query performance?**
 
@@ -459,7 +459,7 @@ This layered pruning means a query touching 1% of data may only open 1% of files
 
 ---
 
-## 15. Maintenance Operations
+## 15. <mark>Maintenance Operations</mark>
 
 **Q: What routine maintenance operations does an Iceberg table require?**
 

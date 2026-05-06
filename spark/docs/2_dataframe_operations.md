@@ -1,7 +1,7 @@
 
 ## Selecting Columns
 
-```py
+```python
 from pyspark.sql import functions as F
 
 # Select with transformation
